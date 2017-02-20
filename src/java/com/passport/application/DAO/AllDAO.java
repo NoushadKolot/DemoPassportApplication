@@ -10,6 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -20,6 +21,13 @@ import java.sql.Statement;
  */
 public class AllDAO {
     private Object abean;
+    Connection con;
+    
+    public void AllDAO() throws SQLException
+    {
+        con=DriverManager.getConnection("jdbc:derby://localhost:1527/Passport","pass","pass");
+    }
+    
 
 public boolean Register(String U, String P) throws SQLException, ClassNotFoundException, NoSuchAlgorithmException {
     SecureRandom scr=SecureRandom.getInstance("SHA1PRNG");
@@ -40,7 +48,6 @@ return rt.next();
 public Statement getStatement() throws SQLException, ClassNotFoundException
     {
        Class.forName("org.apache.derby.jdbc.ClientDriver");
-       Connection con=DriverManager.getConnection("jdbc:derby://localhost:1527/Passport","pass","pass");
        Statement stmt=con.createStatement();
        return stmt; 
     }
@@ -68,7 +75,10 @@ public Statement getStatement() throws SQLException, ClassNotFoundException
     }
 
     public String checkRole(String User) throws SQLException, ClassNotFoundException {
-        ResultSet rs=this.getStatement().executeQuery("select * from login where UN='"+User+"'");
+        //ResultSet rs=this.getStatement().executeQuery("select * from login where UN='"+User+"'");
+        PreparedStatement pr= con.prepareStatement("select * from login where UN=?");
+        pr.setString(1,User);
+        ResultSet rs=pr.executeQuery();
         if(rs.next()){
         return rs.getString("role");
         }
