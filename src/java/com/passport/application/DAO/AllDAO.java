@@ -76,8 +76,7 @@ public Statement getStatement() throws SQLException, ClassNotFoundException
 
     public String checkRole(String User) throws SQLException, ClassNotFoundException {
      ResultSet rs=this.getStatement().executeQuery("select * from login where UN='"+User+"'");
-       
-//     PreparedStatement pr= con.prepareStatement("select * from login where UN=?");
+ //     PreparedStatement pr= con.prepareStatement("select * from login where UN=?");
 //        pr.setString(1,User);
 //        ResultSet rs=pr.executeQuery();
         if(rs.next()){
